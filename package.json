@@ -1,0 +1,31 @@
+{
+  "name": "mutant-pull-reduce",
+  "version": "0.0.0",
+  "description": "Reduce the output of a pull-stream into a mutant observable.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmckegg/mutant-pull-reduce.git"
+  },
+  "keywords": [
+    "mutant",
+    "observable",
+    "observ",
+    "pull",
+    "convert"
+  ],
+  "author": "Matt McKegg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mmckegg/mutant-pull-reduce/issues"
+  },
+  "homepage": "https://github.com/mmckegg/mutant-pull-reduce#readme",
+  "dependencies": {
+    "mutant": "^3.14.1",
+    "pull-pause": "0.0.0",
+    "pull-stream": "^3.5.0"
+  }
+}
