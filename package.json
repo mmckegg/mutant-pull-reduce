@@ -1,6 +1,6 @@
 {
   "name": "mutant-pull-reduce",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Reduce the output of a pull-stream into a mutant observable.",
   "main": "index.js",
   "scripts": {
