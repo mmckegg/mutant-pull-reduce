@@ -1,5 +1,6 @@
 var pullPause = require('pull-pause')
 var Value = require('mutant/value')
+var computed = require('mutant/computed')
 var LazyWatcher = require('mutant/lib/lazy-watcher')
 
 var pull = require('pull-stream')
@@ -20,19 +21,22 @@ module.exports = function (stream, reducer, opts) {
 
   binder.value = opts.startValue
   binder.nextTick = opts.nextTick
-  result.sync = Value(false)
+  var sync = Value(false)
+  result.sync = computed([sync, result], (v) => v)
 
   pull(
     stream,
     pauser,
     pull.drain((item) => {
       if (item.sync) {
-        result.sync.set(true)
+        sync.set(true)
       } else {
         seq += 1
         binder.value = reducer(binder.value, item)
         binder.onUpdate()
       }
+    }, () => {
+      sync.set(true)
     })
   )
 
