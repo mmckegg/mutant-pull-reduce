@@ -24,6 +24,13 @@ module.exports = function (stream, reducer, opts) {
   var sync = Value(false)
   result.sync = computed([sync, result], (v) => v)
 
+  result.push = function (item) {
+    // allow manual pushing in of items
+    seq += 1
+    binder.value = reducer(binder.value, item)
+    binder.onUpdate()
+  }
+
   pull(
     stream,
     pauser,
@@ -31,9 +38,7 @@ module.exports = function (stream, reducer, opts) {
       if (item.sync) {
         sync.set(true)
       } else {
-        seq += 1
-        binder.value = reducer(binder.value, item)
-        binder.onUpdate()
+        result.push(item)
       }
     }, () => {
       sync.set(true)
