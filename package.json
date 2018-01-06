@@ -26,7 +26,6 @@
   "dependencies": {
     "mutant": "^3.14.1",
     "pull-abortable": "^4.1.1",
-    "pull-pause": "0.0.0",
     "pull-stream": "^3.5.0"
   }
 }
