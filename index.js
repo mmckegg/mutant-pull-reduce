@@ -17,11 +17,18 @@ var pull = require('pull-stream')
  * @opts The options (startValue, nextTick)
  */
 module.exports = function (getStream, reducer, opts) {
+
   var aborter = Aborter((aborted) => {})
   var seq = 0
   var lastSeq = -1
 
-  var binder = LazyWatcher(update, startStream, aborter.abort)
+  var binder = LazyWatcher(update, startStream, () => {
+    var abort = aborter.abort
+    // We need a new aborter in case there is a new subscriber and the stream
+    // is resumed again
+    aborter = Aborter( (aborted) => {})
+    abort()
+  })
   var result = function MutantPullReduce (listener) {
     if (!listener) {
       return binder.getValue()
@@ -48,7 +55,7 @@ module.exports = function (getStream, reducer, opts) {
    */
   function startStream() {
     pull(
-      getStream(binder.value),
+      getStream(binder.getValue()),
       aborter,
       pull.drain((item) => {
         if (item.sync) {

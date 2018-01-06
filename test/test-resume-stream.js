@@ -13,6 +13,11 @@ var testStreamValues = [{
 }, {
   "val": "second",
   sequenceNumber: 2
+},
+// This shouldn't be reached after the abort
+{
+  "val": "third",
+  sequenceNumber: 3
 }];
 
 var testStream = pull.values(testStreamValues);
@@ -84,7 +89,6 @@ test('A pull-stream can be resumed.', function(t) {
   var reducer = (latestValue, item) => item;
 
   var observable = MutantPullReduce(getStream, reducer, {
-    startValue: 0,
     nextTick: true
   });
 
@@ -98,13 +102,14 @@ test('A pull-stream can be resumed.', function(t) {
   var subscribeRest = observable(
     (value) => {
       // noop
+      console.log(value)
     }
   );
 
-  t.deepEquals(observable() , testStreamValues2[1], "Expect the end of the stream to be reached after re-subscribing")
-
   t.deepEquals(timesStart, 1, "Expect 'start stream' to have only been invoked once after re-subscribing");
   t.deepEquals(timesResume, 1, "Expect 'resume stream' to have been invoked after re-subscribing");
+
+  t.deepEquals(observable() , testStreamValues2[1], "Expect the end of the stream to be reached after re-subscribing")
 
   t.end();
 
