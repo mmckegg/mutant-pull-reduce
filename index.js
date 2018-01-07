@@ -22,6 +22,8 @@ module.exports = function (getStream, reducer, opts) {
   var seq = 0
   var lastSeq = -1
 
+  var lastStreamValue = null;
+
   var binder = LazyWatcher(update, startStream, () => {
     var abort = aborter.abort
     // We need a new aborter in case there is a new subscriber and the stream
@@ -55,13 +57,17 @@ module.exports = function (getStream, reducer, opts) {
    */
   function startStream() {
     pull(
-      getStream(binder.getValue()),
+      getStream(lastStreamValue),
       aborter,
       pull.drain((item) => {
         if (item.sync) {
           sync.set(true)
         } else {
           result.push(item)
+
+          // We track the last stream value separately as the client may have
+          // called the 'push' function
+          lastStreamValue = item
         }
       }, () => {
         sync.set(true)
