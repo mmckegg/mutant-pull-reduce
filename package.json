@@ -4,7 +4,7 @@
   "description": "Reduce the output of a pull-stream into a mutant observable.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "browserify test/*.js | tape-run | tap-spec"
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,14 @@
   "homepage": "https://github.com/mmckegg/mutant-pull-reduce#readme",
   "dependencies": {
     "mutant": "^3.14.1",
-    "pull-pause": "0.0.0",
+    "pull-abortable": "^4.1.1",
     "pull-stream": "^3.5.0"
+  },
+  "devDependencies": {
+    "browserify": "^13.1.1",
+    "setimmediate": "^1.0.5",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.3",
+    "tape-run": "^2.1.4"
   }
 }
